@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Services Direct Improvements</title>
+    <style>
+        body { background: #121212; color: #e0e0e0; font-family: monospace; padding: 40px; }
+        h1 { color: #00ffcc; }
+        .box { background: #1e1e1e; padding: 20px; border: 1px solid #333; max-width: 500px; }
+        select, input, button { width: 100%; padding: 10px; margin-top: 10px; background: #2a2a2a; color: #fff; border: 1px solid #444; }
+        button { background: #00ffcc; color: #000; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class='box'>
+        <h1>// SERVICES DIRECT IMPROVEMENTS</h1>
+        <p>Instant Project Estimation Engine</p>
+        <label>Select Service:</label>
+        <select id='service'>
+            <option>Kitchen Remodel</option>
+            <option>Bathroom Reno</option>
+            <option>Drywall & Painting</option>
+            <option>Flooring Installation</option>
+        </select>
+        <label>Square Footage:</label>
+        <input type='number' id='sqft' value='150'>
+        <button onclick='calculate()'>Calculate Estimate</button>
+        <h3 id='result'></h3>
+    </div>
+    <script>
+        async function calculate() {
+            let service = document.getElementById('service').value;
+            let sqft = document.getElementById('sqft').value;
+            let res = await fetch('/api/estimate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({service, sqft})
+            });
+            let data = await res.json();
+            document.getElementById('result').innerText = 'Estimated Cost: $' + data.estimated_cost;
+        }
+    </script>
+</body>
+</html>
