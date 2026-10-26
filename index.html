@@ -5,218 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services Direct - Operations & Estimator</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body, html { height: 100%; width: 100%; overflow-x: hidden; color: #fff; background-color: #0b1a12; }
-
-        /* Video Background & Green Tint Overlay */
-        .video-background-container {
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+        }
+        #bg-video {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2; overflow: hidden; pointer-events: none;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -999;
+            object-fit: cover;
+            filter: brightness(0.5) contrast(1.1);
         }
-        .video-background-container video {
-            width: 100vw; height: 100vh; object-fit: cover;
-        }
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(6, 32, 18, 0.82) 0%, rgba(10, 48, 28, 0.78) 100%);
-            z-index: -1;
-        }
-
-        /* Layout Container */
-        .dashboard-container {
-            max-width: 1280px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1;
-        }
-
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 40px; border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding-bottom: 20px;
-        }
-        header h1 { font-size: 28px; font-weight: 700; color: #e2fcd9; }
-        header .status-badge {
-            background: rgba(46, 204, 113, 0.2); border: 1px solid #2ecc71; color: #2ecc71;
-            padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
-        }
-
-        /* Grid Layout */
-        .grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;
-        }
-
-        /* Service Cards */
-        .service-card {
-            background: rgba(15, 38, 24, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 16px; padding: 28px;
-            backdrop-filter: blur(12px);
-            transition: all 0.3s ease;
-            cursor: pointer;
+        .container {
             position: relative;
+            z-index: 1;
+            padding: 20px;
+            background: rgba(0, 20, 10, 0.75);
+            min-height: 100vh;
         }
-        .service-card:hover {
-            transform: translateY(-5px);
-            border-color: #2ecc71;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-            background: rgba(20, 56, 35, 0.85);
-        }
-
-        .card-header {
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .card-header h3 { font-size: 20px; font-weight: 600; color: #fff; }
-        .click-hint { font-size: 12px; color: #2ecc71; font-weight: 600; text-transform: uppercase; margin-top: 10px; display: block; }
-
-        /* Modal Estimator Popup Overlay */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 14, 8, 0.85); backdrop-filter: blur(8px);
-            display: none; justify-content: center; align-items: center; z-index: 100;
-        }
-        .modal-overlay.active { display: flex; }
-
-        .modal-card {
-            background: rgba(14, 38, 24, 0.95); border: 1px solid #2ecc71;
-            width: 100%; max-width: 500px; padding: 36px; border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;
-        }
-        .modal-card h2 { color: #e2fcd9; margin-bottom: 20px; font-size: 24px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 14px; margin-bottom: 8px; color: #b6f3c9; }
-        .form-group input, .form-group select {
-            width: 100%; padding: 12px 16px; background: rgba(5, 18, 10, 0.8);
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 16px;
-        }
-        .estimate-output {
-            background: rgba(46, 204, 113, 0.15); border: 1px dashed #2ecc71;
-            padding: 15px; border-radius: 8px; margin-bottom: 25px; text-align: center;
-        }
-        .estimate-output span { font-size: 22px; font-weight: 700; color: #2ecc71; display: block; margin-top: 5px; }
-
-        .modal-actions { display: flex; gap: 12px; }
-        .btn-primary {
-            flex: 1; background: #2ecc71; color: #07160d; border: none; padding: 12px;
-            font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 15px;
-        }
-        .btn-primary:hover { background: #27ae60; }
-        .btn-secondary {
-            background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3);
-            padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 15px;
-        }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+        h1 { color: #00ff66; text-shadow: 0 0 10px rgba(0,255,102,0.5); }
+        .card { background: rgba(0, 40, 20, 0.85); border: 1px solid #00ff66; padding: 20px; margin: 15px 0; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-    <!-- Video Background & Green Tint -->
-    <div class="video-background-container">
-        <video autoplay muted loop playsinline>
-            <source src="assets/services_direct_Improvements.mp4?v=2" type="video/mp4">
-        </video>
-    </div>
-    <div class="overlay"></div>
+    <!-- ComfyUI Custom Video Background -->
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="assets/services_direct_Improvements.mp4?v=final" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
 
-    <div class="dashboard-container">
-        <header>
-            <h1>Services Direct &bull; Operations & Estimator</h1>
-            <div class="status-badge">? Systems Operational</div>
-        </header>
-
-        <div class="grid">
-            <div class="service-card" onclick="openEstimator('Kitchen & Millwork Remodel')">
-                <div class="card-header">
-                    <h3>Kitchen & Millwork Remodel</h3>
-                </div>
-                <span class="click-hint">Click to launch estimator &rarr;</span>
-            </div>
-
-            <div class="service-card" onclick="openEstimator('Bathroom Reno & Plumbing')">
-                <div class="card-header">
-                    <h3>Bathroom Reno & Plumbing</h3>
-                </div>
-                <span class="click-hint">Click to launch estimator &rarr;</span>
-            </div>
-
-            <div class="service-card" onclick="openEstimator('Drywall & Finish Painting')">
-                <div class="card-header">
-                    <h3>Drywall & Finish Painting</h3>
-                </div>
-                <span class="click-hint">Click to launch estimator &rarr;</span>
-            </div>
-
-            <div class="service-card" onclick="openEstimator('Flooring & Surface Systems')">
-                <div class="card-header">
-                    <h3>Flooring & Surface Systems</h3>
-                </div>
-                <span class="click-hint">Click to launch estimator &rarr;</span>
-            </div>
-
-            <div class="service-card" onclick="openEstimator('Logistics & Site Prep')">
-                <div class="card-header">
-                    <h3>Logistics & Site Prep</h3>
-                </div>
-                <span class="click-hint">Click to launch estimator &rarr;</span>
-            </div>
-
-            <div class="service-card" onclick="openEstimator('Structural & Framing Ops')">
-                <div class="card-header">
-                    <h3>Structural & Framing Ops</h3>
-                </div>
-                <span class="click-hint">Click to launch estimator &rarr;</span>
-            </div>
+    <div class="container">
+        <h1>Services Direct • Operations & Estimator</h1>
+        <p>?? Systems Operational & Background Streaming Active</p>
+        
+        <div class="card">
+            <h2>Kitchen & Millwork Remodel</h2>
+            <p>CLICK TO LAUNCH ESTIMATOR ?</p>
+        </div>
+        <div class="card">
+            <h2>Bathroom Reno & Plumbing</h2>
+            <p>CLICK TO LAUNCH ESTIMATOR ?</p>
+        </div>
+        <div class="card">
+            <h2>Drywall & Finish Painting</h2>
+            <p>CLICK TO LAUNCH ESTIMATOR ?</p>
         </div>
     </div>
 
-    <!-- Estimation Modal Popup -->
-    <div class="modal-overlay" id="estimatorModal">
-        <div class="modal-card">
-            <h2 id="modalTitle">Project Estimator</h2>
-            <div class="form-group">
-                <label>Estimated Scope / Square Footage</label>
-                <input type="number" id="sqftInput" value="500" oninput="calculateEstimate()">
-            </div>
-            <div class="form-group">
-                <label>Urgency / Deployment Speed</label>
-                <select id="speedSelect" onchange="calculateEstimate()">
-                    <option value="1">Standard Timeline</option>
-                    <option value="1.25">Accelerated Crew (+25%)</option>
-                    <option value="1.5">Priority Emergency Deployment (+50%)</option>
-                </select>
-            </div>
-            <div class="estimate-output">
-                Estimated Project Cost Range
-                <span id="estimateResult">$4,500 - $6,200</span>
-            </div>
-            <div class="modal-actions">
-                <button class="btn-primary" onclick="alert('Estimate submitted to dispatch!'); closeEstimator();">Dispatch Crew</button>
-                <button class="btn-secondary" onclick="closeEstimator()">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let currentMultiplier = 10;
-
-        function openEstimator(serviceName) {
-            document.getElementById('modalTitle').innerText = serviceName + ' Estimator';
-            document.getElementById('estimatorModal').classList.add('active');
-            calculateEstimate();
-        }
-
-        function closeEstimator() {
-            document.getElementById('estimatorModal').classList.remove('active');
-        }
-
-        function calculateEstimate() {
-            let sqft = document.getElementById('sqftInput').value || 100;
-            let speedMult = parseFloat(document.getElementById('speedSelect').value);
-            let base = sqft * 12 * speedMult;
-            let low = Math.round(base * 0.9);
-            let high = Math.round(base * 1.25);
-            document.getElementById('estimateResult').innerText = '$' + low.toLocaleString() + ' - $' + high.toLocaleString();
-        }
-    </script>
 </body>
 </html>
-
-
-
