@@ -5,60 +5,275 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services Direct - Operations & Estimator</title>
     <style>
+        * { box-sizing: border-box; }
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow-x: hidden;
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
             font-family: Arial, sans-serif;
             color: #ffffff;
+            background-color: #000;
         }
         #bg-video {
             position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -999;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             object-fit: cover;
-            filter: brightness(0.5) contrast(1.1);
+            z-index: -999;
+            pointer-events: none;
         }
         .container {
             position: relative;
             z-index: 1;
-            padding: 20px;
-            background: rgba(0, 20, 10, 0.75);
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto;
             min-height: 100vh;
+            background: rgba(0, 15, 8, 0.45);
         }
-        h1 { color: #00ff66; text-shadow: 0 0 10px rgba(0,255,102,0.5); }
-        .card { background: rgba(0, 40, 20, 0.85); border: 1px solid #00ff66; padding: 20px; margin: 15px 0; border-radius: 8px; }
+        h1 { 
+            color: #00ff66; 
+            text-shadow: 0 0 15px rgba(0,255,102,0.8);
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        .status { 
+            color: #00ff66; 
+            font-weight: bold; 
+            margin-bottom: 30px; 
+            font-size: 1.05rem;
+            text-shadow: 0 0 8px rgba(0,255,102,0.5);
+        }
+        .card { 
+            background: rgba(0, 35, 18, 0.65); 
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(0, 255, 102, 0.7); 
+            padding: 24px; 
+            margin: 20px 0; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            background: rgba(0, 50, 25, 0.8);
+            border-color: #00ff66;
+            box-shadow: 0 12px 30px rgba(0,255,102,0.3);
+        }
+        .card h2 { margin: 0 0 8px 0; font-size: 1.4rem; color: #fff; }
+        .action { color: #80ffbb; font-size: 0.9rem; font-weight: bold; }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #001f0f;
+            border: 2px solid #00ff66;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%; max-width: 500px;
+            box-shadow: 0 0 30px rgba(0,255,102,0.5);
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            color: #00ff66;
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #80ffbb; font-size: 0.9rem; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px;
+            background: #000f07; border: 1px solid #00ff66;
+            color: #fff; border-radius: 6px;
+        }
+        .calc-btn {
+            background: #00ff66; color: #000;
+            border: none; padding: 12px 20px;
+            font-weight: bold; border-radius: 6px;
+            cursor: pointer; width: 100%; margin-top: 10px;
+            font-size: 1rem;
+        }
+        .calc-btn:hover { background: #00cc52; }
+        .result-box {
+            margin-top: 15px; padding: 12px;
+            background: rgba(0,255,102,0.1);
+            border: 1px dashed #00ff66;
+            border-radius: 6px;
+            font-weight: bold; color: #00ff66;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <!-- ComfyUI Custom Video Background -->
+    <!-- Background ComfyUI Video -->
     <video autoplay muted loop playsinline id="bg-video">
-        <source src="assets/services_direct_Improvements.mp4?v=final" type="video/mp4">
+        <source src="assets/services_direct_Improvements.mp4" type="video/mp4">
         Your browser does not support HTML5 video.
     </video>
 
     <div class="container">
-        <h1>Services Direct • Operations & Estimator</h1>
-        <p>?? Systems Operational & Background Streaming Active</p>
+        <h1>Services Direct &bull; Operations & Estimator</h1>
+        <div class="status">&#10003; Systems Operational &bull; Custom ComfyUI Background Active</div>
         
-        <div class="card">
+        <div class="card" onclick="openModal('kitchenModal')">
             <h2>Kitchen & Millwork Remodel</h2>
-            <p>CLICK TO LAUNCH ESTIMATOR ?</p>
+            <div class="action">CLICK TO LAUNCH ESTIMATOR &rarr;</div>
         </div>
-        <div class="card">
+        <div class="card" onclick="openModal('bathroomModal')">
             <h2>Bathroom Reno & Plumbing</h2>
-            <p>CLICK TO LAUNCH ESTIMATOR ?</p>
+            <div class="action">CLICK TO LAUNCH ESTIMATOR &rarr;</div>
         </div>
-        <div class="card">
+        <div class="card" onclick="openModal('drywallModal')">
             <h2>Drywall & Finish Painting</h2>
-            <p>CLICK TO LAUNCH ESTIMATOR ?</p>
+            <div class="action">CLICK TO LAUNCH ESTIMATOR &rarr;</div>
+        </div>
+        <div class="card" style="border-color: #ffaa00; background: rgba(35, 25, 0, 0.65);" onclick="openModal('beehiveModal')">
+            <h2 style="color: #ffcc00;">Beehive Custom Job Creation</h2>
+            <div class="action" style="color: #ffea80;">CLICK TO LAUNCH CUSTOM WORKFLOW &rarr;</div>
         </div>
     </div>
 
+    <!-- Kitchen Modal -->
+    <div id="kitchenModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('kitchenModal')">&times;</span>
+            <h2 style="color: #00ff66;">Kitchen Estimator</h2>
+            <div class="form-group">
+                <label>Linear Footage of Cabinets/Counters:</label>
+                <input type="number" id="kitSqFt" value="15">
+            </div>
+            <div class="form-group">
+                <label>Tier:</label>
+                <select id="kitTier">
+                    <option value="250">Standard ($250/ft)</option>
+                    <option value="400">Premium Millwork ($400/ft)</option>
+                </select>
+            </div>
+            <button class="calc-btn" onclick="calcKitchen()">Calculate Estimate</button>
+            <div id="kitResult" class="result-box" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Bathroom Modal -->
+    <div id="bathroomModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('bathroomModal')">&times;</span>
+            <h2 style="color: #00ff66;">Bathroom Estimator</h2>
+            <div class="form-group">
+                <label>Fixture Count (Sink, Tub, Toilet, Shower):</label>
+                <input type="number" id="bathFix" value="3">
+            </div>
+            <div class="form-group">
+                <label>Tile & Plumbing Grade:</label>
+                <select id="bathGrade">
+                    <option value="1200">Standard ($1,200/fixture)</option>
+                    <option value="2000">Custom Tile & High-End ($2,000/fixture)</option>
+                </select>
+            </div>
+            <button class="calc-btn" onclick="calcBathroom()">Calculate Estimate</button>
+            <div id="bathResult" class="result-box" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Drywall Modal -->
+    <div id="drywallModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('drywallModal')">&times;</span>
+            <h2 style="color: #00ff66;">Drywall & Paint Estimator</h2>
+            <div class="form-group">
+                <label>Total Square Footage (Walls & Ceiling):</label>
+                <input type="number" id="drySqFt" value="500">
+            </div>
+            <button class="calc-btn" onclick="calcDrywall()">Calculate Estimate</button>
+            <div id="dryResult" class="result-box" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Beehive Custom Job Modal -->
+    <div id="beehiveModal" class="modal">
+        <div class="modal-content" style="border-color: #ffaa00;">
+            <span class="close-btn" onclick="closeModal('beehiveModal')" style="color: #ffaa00;">&times;</span>
+            <h2 style="color: #ffcc00;">Beehive Custom Job Creator</h2>
+            <div class="form-group">
+                <label>Job Code / Identifier:</label>
+                <input type="text" id="bhCode" placeholder="e.g. BH-JOB-101">
+            </div>
+            <div class="form-group">
+                <label>Scope of Work Description:</label>
+                <input type="text" id="bhDesc" placeholder="e.g. Custom framework & structural integration">
+            </div>
+            <div class="form-group">
+                <label>Estimated Labor Hours:</label>
+                <input type="number" id="bhHours" value="20">
+            </div>
+            <div class="form-group">
+                <label>Material Cost ($):</label>
+                <input type="number" id="bhCost" value="500">
+            </div>
+            <button class="calc-btn" style="background: #ffaa00; color: #000;" onclick="calcBeehive()">Generate Beehive Job Spec</button>
+            <div id="bhResult" class="result-box" style="border-color: #ffaa00; color: #ffcc00; display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        
+        function calcKitchen() {
+            let feet = parseFloat(document.getElementById('kitSqFt').value) || 0;
+            let rate = parseFloat(document.getElementById('kitTier').value);
+            let total = feet * rate;
+            let res = document.getElementById('kitResult');
+            res.style.display = 'block';
+            res.innerHTML = "Estimated Total: $" + total.toLocaleString();
+        }
+
+        function calcBathroom() {
+            let fix = parseFloat(document.getElementById('bathFix').value) || 0;
+            let rate = parseFloat(document.getElementById('bathGrade').value);
+            let total = fix * rate;
+            let res = document.getElementById('bathResult');
+            res.style.display = 'block';
+            res.innerHTML = "Estimated Total: $" + total.toLocaleString();
+        }
+
+        function calcDrywall() {
+            let sqft = parseFloat(document.getElementById('drySqFt').value) || 0;
+            let total = sqft * 3.50; // $3.50 per sqft for hang, tape, mud & paint
+            let res = document.getElementById('dryResult');
+            res.style.display = 'block';
+            res.innerHTML = "Estimated Total: $" + total.toLocaleString();
+        }
+
+        function calcBeehive() {
+            let code = document.getElementById('bhCode').value || 'BH-DEFAULT';
+            let desc = document.getElementById('bhDesc').value || 'Custom Task';
+            let hours = parseFloat(document.getElementById('bhHours').value) || 0;
+            let cost = parseFloat(document.getElementById('bhCost').value) || 0;
+            let total = (hours * 65) + cost; // $65/hr labor rate + materials
+            let res = document.getElementById('bhResult');
+            res.style.display = 'block';
+            res.innerHTML = "Beehive Job [" + code + "] Total: $" + total.toLocaleString() + " (" + hours + " hrs @ $65/hr + $" + cost + " materials)";
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
