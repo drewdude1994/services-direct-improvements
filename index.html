@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services Direct - Job Operations</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body, html { height: 100%; width: 100%; overflow-x: hidden; color: #fff; }
+
+        /* Video Background Container */
+        .video-background-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+        .bg-video {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        /* Warm Green Cinematic Overlay */
+        .warm-green-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(10, 40, 20, 0.75), rgba(20, 60, 30, 0.65));
+            z-index: -1;
+        }
+
+        /* Dashboard UI Layout */
+        .dashboard {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgba(15, 25, 20, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 15px;
+        }
+        header h1 { font-size: 1.8rem; letter-spacing: 0.5px; }
+        .btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #388e3c; }
+
+        /* Expanded Job Cards Grid */
+        .job-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .job-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .job-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .job-card h3 { margin-bottom: 10px; font-size: 1.2rem; color: #a5d6a7; }
+        .job-card p { font-size: 0.9rem; color: #cfd8dc; margin-bottom: 15px; }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-active { background: #1b5e20; color: #a5d6a7; }
+        .status-pending { background: #e65100; color: #ffe0b2; }
+    </style>
+</head>
+<body>
+
+    <!-- Video Background with Warm Green Filter -->
+    <div class="video-background-container">
+        <video autoplay muted loop playsinline class="bg-video">
+            <source src="assets/services_direct_Improvements.mp4" type="video/mp4">
+        </video>
+        <div class="warm-green-overlay"></div>
+    </div>
+
+    <!-- UI Redesign / Active Jobs Dashboard -->
+    <div class="dashboard">
+        <header>
+            <h1>Services Direct — Operations</h1>
+            <button class="btn" onclick="alert('Trigger manual render update')">New Render Job</button>
+        </header>
+
+        <div class="job-grid">
+            <div class="job-card">
+                <h3>Loop Background Loop</h3>
+                <p>LTX-Video 2B model render integration, seamless background loop sequence.</p>
+                <span class="status-badge status-active">Active</span>
+            </div>
+            <div class="job-card">
+                <h3>Logistics Data Pipeline</h3>
+                <p>Automated verification script processing and sanitizing dataset streams.</p>
+                <span class="status-badge status-active">Active</span>
+            </div>
+            <div class="job-card">
+                <h3>ComfyUI Kokoro TTS Node</h3>
+                <p>Audio synchronization pipeline for character speech and cue tracks.</p>
+                <span class="status-badge status-pending">Pending Update</span>
+            </div>
+            <div class="job-card">
+                <h3>Zestly Store Promo Clip</h3>
+                <p>TikTok and Pinterest commercial video compilation and formatting.</p>
+                <span class="status-badge status-active">Active</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
