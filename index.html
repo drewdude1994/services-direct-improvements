@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services Direct - Operations Dashboard</title>
+    <title>Services Direct - Operations & Estimator</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body, html { height: 100%; width: 100%; overflow-x: hidden; color: #fff; background-color: #0b1a12; }
 
-        /* Video Background */
+        /* Video Background & Green Tint Overlay */
         .video-background-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -19,7 +19,7 @@
         }
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(6, 28, 16, 0.85) 0%, rgba(11, 44, 26, 0.75) 100%);
+            background: linear-gradient(135deg, rgba(6, 32, 18, 0.82) 0%, rgba(10, 48, 28, 0.78) 100%);
             z-index: -1;
         }
 
@@ -32,7 +32,7 @@
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 40px; border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding-bottom: 20px;
         }
-        header h1 { font-size: 28px; font-weight: 700; letter-spacing: 0.5px; color: #e2fcd9; }
+        header h1 { font-size: 28px; font-weight: 700; color: #e2fcd9; }
         header .status-badge {
             background: rgba(46, 204, 113, 0.2); border: 1px solid #2ecc71; color: #2ecc71;
             padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
@@ -40,75 +40,74 @@
 
         /* Grid Layout */
         .grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;
         }
 
-        /* Service Cards / Clickable Toggles */
+        /* Service Cards */
         .service-card {
             background: rgba(15, 38, 24, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 16px; padding: 28px;
             backdrop-filter: blur(12px);
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
-            overflow: hidden;
         }
         .service-card:hover {
             transform: translateY(-5px);
             border-color: #2ecc71;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-        }
-        .service-card.active {
-            border-color: #2ecc71;
             background: rgba(20, 56, 35, 0.85);
-            box-shadow: 0 0 20px rgba(46, 204, 113, 0.25);
         }
 
         .card-header {
-            display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
         }
         .card-header h3 { font-size: 20px; font-weight: 600; color: #fff; }
-        
-        /* Toggle Switch UI */
-        .toggle-switch {
-            width: 48px; height: 26px; background: rgba(255, 255, 255, 0.2);
-            border-radius: 15px; position: relative; transition: background 0.3s;
-        }
-        .toggle-switch::after {
-            content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
-            background: #fff; border-radius: 50%; transition: transform 0.3s;
-        }
-        .service-card.active .toggle-switch { background: #2ecc71; }
-        .service-card.active .toggle-switch::after { transform: translateX(22px); }
+        .click-hint { font-size: 12px; color: #2ecc71; font-weight: 600; text-transform: uppercase; margin-top: 10px; display: block; }
 
-        /* Description and Team Specs */
-        .service-desc {
-            font-size: 14px; line-height: 1.6; color: #d0d7d2; margin-bottom: 20px;
+        /* Modal Estimator Popup Overlay */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 14, 8, 0.85); backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center; z-index: 100;
         }
+        .modal-overlay.active { display: flex; }
 
-        .team-badge {
-            background: rgba(46, 204, 113, 0.1); border-left: 3px solid #2ecc71;
-            padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 13px; color: #b6f3c9;
-            margin-top: 15px;
+        .modal-card {
+            background: rgba(14, 38, 24, 0.95); border: 1px solid #2ecc71;
+            width: 100%; max-width: 500px; padding: 36px; border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;
         }
-        .team-badge strong { color: #fff; display: block; margin-bottom: 2px; }
+        .modal-card h2 { color: #e2fcd9; margin-bottom: 20px; font-size: 24px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; margin-bottom: 8px; color: #b6f3c9; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px 16px; background: rgba(5, 18, 10, 0.8);
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 16px;
+        }
+        .estimate-output {
+            background: rgba(46, 204, 113, 0.15); border: 1px dashed #2ecc71;
+            padding: 15px; border-radius: 8px; margin-bottom: 25px; text-align: center;
+        }
+        .estimate-output span { font-size: 22px; font-weight: 700; color: #2ecc71; display: block; margin-top: 5px; }
 
-        /* Action Footer */
-        .action-bar {
-            margin-top: 40px; text-align: center;
+        .modal-actions { display: flex; gap: 12px; }
+        .btn-primary {
+            flex: 1; background: #2ecc71; color: #07160d; border: none; padding: 12px;
+            font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 15px;
         }
-        .deploy-btn {
-            background: #2ecc71; color: #07160d; border: none; padding: 14px 36px;
-            font-size: 16px; font-weight: 700; border-radius: 30px; cursor: pointer;
-            transition: background 0.2s, transform 0.2s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+        .btn-primary:hover { background: #27ae60; }
+        .btn-secondary {
+            background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3);
+            padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 15px;
         }
-        .deploy-btn:hover { background: #27ae60; transform: scale(1.03); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
 
-    <!-- Video Background Loop -->
+    <!-- Video Background & Green Tint -->
     <div class="video-background-container">
         <video autoplay muted loop playsinline>
             <source src="assets/services_direct_Improvements.mp4" type="video/mp4">
@@ -118,92 +117,102 @@
 
     <div class="dashboard-container">
         <header>
-            <h1>Services Direct &bull; Job Operations Command</h1>
+            <h1>Services Direct &bull; Operations & Estimator</h1>
             <div class="status-badge">● Systems Operational</div>
         </header>
 
         <div class="grid">
-            <!-- Card 1 -->
-            <div class="service-card active" onclick="toggleCard(this)">
+            <div class="service-card" onclick="openEstimator('Kitchen & Millwork Remodel')">
                 <div class="card-header">
                     <h3>Kitchen & Millwork Remodel</h3>
-                    <div class="toggle-switch"></div>
                 </div>
-                <p class="service-desc">Complete spatial optimization, custom cabinetry mounting, and structural layout transformations executed with sub-millimeter precision.</p>
-                <div class="team-badge">
-                    <strong>Fully Equipped Team:</strong> 3 Master Carpenters & 2 Certified Installers equipped with portable CNC rigs and heavy-duty dust containment systems.
-                </div>
+                <span class="click-hint">Click to launch estimator &rarr;</span>
             </div>
 
-            <!-- Card 2 -->
-            <div class="service-card active" onclick="toggleCard(this)">
+            <div class="service-card" onclick="openEstimator('Bathroom Reno & Plumbing')">
                 <div class="card-header">
                     <h3>Bathroom Reno & Plumbing</h3>
-                    <div class="toggle-switch"></div>
                 </div>
-                <p class="service-desc">Full-scale waterproofing, custom tile setting, fixture integrations, and complete supply line overhauls built for longevity.</p>
-                <div class="team-badge">
-                    <strong>Fully Equipped Team:</strong> 2 Licensed Plumbers & 2 Tile Artisans carrying laser levels, high-pressure test manifolds, and diamond wet-saw setups.
-                </div>
+                <span class="click-hint">Click to launch estimator &rarr;</span>
             </div>
 
-            <!-- Card 3 -->
-            <div class="service-card" onclick="toggleCard(this)">
+            <div class="service-card" onclick="openEstimator('Drywall & Finish Painting')">
                 <div class="card-header">
                     <h3>Drywall & Finish Painting</h3>
-                    <div class="toggle-switch"></div>
                 </div>
-                <p class="service-desc">Flawless Level 5 surface skimming, seamless corner taping, and multi-coat protective spraying for immaculate interiors.</p>
-                <div class="team-badge">
-                    <strong>Fully Equipped Team:</strong> 3 Surface Specialists equipped with automated taping banjos, Festool dust-free sanders, and industrial airless sprayers.
-                </div>
+                <span class="click-hint">Click to launch estimator &rarr;</span>
             </div>
 
-            <!-- Card 4 -->
-            <div class="service-card" onclick="toggleCard(this)">
+            <div class="service-card" onclick="openEstimator('Flooring & Surface Systems')">
                 <div class="card-header">
                     <h3>Flooring & Surface Systems</h3>
-                    <div class="toggle-switch"></div>
                 </div>
-                <p class="service-desc">Precision subfloor leveling, moisture barrier installation, and seamless hardwood, LVP, or tile deployment.</p>
-                <div class="team-badge">
-                    <strong>Fully Equipped Team:</strong> 2 Flooring Technicians with digital hygrometers, hydraulic stretcher kits, and pneumatic stapling arrays.
-                </div>
+                <span class="click-hint">Click to launch estimator &rarr;</span>
             </div>
 
-            <!-- Card 5 -->
-            <div class="service-card" onclick="toggleCard(this)">
+            <div class="service-card" onclick="openEstimator('Logistics & Site Prep')">
                 <div class="card-header">
                     <h3>Logistics & Site Prep</h3>
-                    <div class="toggle-switch"></div>
                 </div>
-                <p class="service-desc">Rapid material staging, heavy hauling logistics coordination, and jobsite debris management pipelines.</p>
-                <div class="team-badge">
-                    <strong>Fully Equipped Team:</strong> 2 Logistics Coordinators operating enclosed cargo rigs, automated pallet handlers, and heavy-duty lift gear.
-                </div>
+                <span class="click-hint">Click to launch estimator &rarr;</span>
             </div>
 
-            <!-- Card 6 -->
-            <div class="service-card active" onclick="toggleCard(this)">
+            <div class="service-card" onclick="openEstimator('Structural & Framing Ops')">
                 <div class="card-header">
                     <h3>Structural & Framing Ops</h3>
-                    <div class="toggle-switch"></div>
                 </div>
-                <p class="service-desc">Load-bearing wall modifications, header reinforcement, and rapid framing framing solutions built to exact code.</p>
-                <div class="team-badge">
-                    <strong>Fully Equipped Team:</strong> 2 Framing Specialists with hydraulic jacks, heavy timber saws, and laser plumb line arrays.
-                </div>
+                <span class="click-hint">Click to launch estimator &rarr;</span>
             </div>
         </div>
+    </div>
 
-        <div class="action-bar">
-            <button class="deploy-btn" onclick="alert('Configuration saved & operational workflows updated successfully!')">Commit Service Toggles</button>
+    <!-- Estimation Modal Popup -->
+    <div class="modal-overlay" id="estimatorModal">
+        <div class="modal-card">
+            <h2 id="modalTitle">Project Estimator</h2>
+            <div class="form-group">
+                <label>Estimated Scope / Square Footage</label>
+                <input type="number" id="sqftInput" value="500" oninput="calculateEstimate()">
+            </div>
+            <div class="form-group">
+                <label>Urgency / Deployment Speed</label>
+                <select id="speedSelect" onchange="calculateEstimate()">
+                    <option value="1">Standard Timeline</option>
+                    <option value="1.25">Accelerated Crew (+25%)</option>
+                    <option value="1.5">Priority Emergency Deployment (+50%)</option>
+                </select>
+            </div>
+            <div class="estimate-output">
+                Estimated Project Cost Range
+                <span id="estimateResult">$4,500 - $6,200</span>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="alert('Estimate submitted to dispatch!'); closeEstimator();">Dispatch Crew</button>
+                <button class="btn-secondary" onclick="closeEstimator()">Close</button>
+            </div>
         </div>
     </div>
 
     <script>
-        function toggleCard(card) {
-            card.classList.toggle('active');
+        let currentMultiplier = 10;
+
+        function openEstimator(serviceName) {
+            document.getElementById('modalTitle').innerText = serviceName + ' Estimator';
+            document.getElementById('estimatorModal').classList.add('active');
+            calculateEstimate();
+        }
+
+        function closeEstimator() {
+            document.getElementById('estimatorModal').classList.remove('active');
+        }
+
+        function calculateEstimate() {
+            let sqft = document.getElementById('sqftInput').value || 100;
+            let speedMult = parseFloat(document.getElementById('speedSelect').value);
+            let base = sqft * 12 * speedMult;
+            let low = Math.round(base * 0.9);
+            let high = Math.round(base * 1.25);
+            document.getElementById('estimateResult').innerText = '$' + low.toLocaleString() + ' - $' + high.toLocaleString();
         }
     </script>
 </body>
