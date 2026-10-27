@@ -123,7 +123,7 @@
 </head>
 <body>
 
-    <!-- Background Video with Raw GitHub Fallback Stream -->
+    <!-- Background Video Stream -->
     <video autoplay muted loop playsinline id="bg-video">
         <source src="https://raw.githubusercontent.com/drewdude1994/services-direct-improvements/main/services_direct_Improvements.mp4" type="video/mp4">
         Your browser does not support HTML5 video.
@@ -155,20 +155,27 @@
     <div id="kitchenModal" class="modal">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="closeModal('kitchenModal')">&times;</span>
-            <h2 style="color: #00ff66;">Kitchen Estimator</h2>
-            <div class="form-group">
-                <label>Linear Footage of Cabinets/Counters:</label>
-                <input type="number" id="kitSqFt" value="15">
-            </div>
-            <div class="form-group">
-                <label>Tier:</label>
-                <select id="kitTier">
-                    <option value="250">Standard ($250/ft)</option>
-                    <option value="400">Premium Millwork ($400/ft)</option>
-                </select>
-            </div>
-            <button class="calc-btn" onclick="calcKitchen()">Calculate Estimate</button>
-            <div id="kitResult" class="result-box" style="display:none;"></div>
+            <h2 style="color: #00ff66;">Kitchen Estimator & Direct Submission</h2>
+            <form action="https://formspree.io/f/xbgggqvo" method="POST">
+                <input type="hidden" name="Service_Type" value="Kitchen & Millwork Remodel">
+                <div class="form-group">
+                    <label>Your Email Address:</label>
+                    <input type="email" name="email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Linear Footage of Cabinets/Counters:</label>
+                    <input type="number" id="kitSqFt" name="Linear_Footage" value="15" oninput="calcKitchen()">
+                </div>
+                <div class="form-group">
+                    <label>Tier:</label>
+                    <select id="kitTier" name="Tier" onchange="calcKitchen()">
+                        <option value="250">Standard ($250/ft)</option>
+                        <option value="400">Premium Millwork ($400/ft)</option>
+                    </select>
+                </div>
+                <div id="kitResult" class="result-box">Estimated Total: $3,750</div>
+                <button type="submit" class="calc-btn">Submit Request to Direct Inbox</button>
+            </form>
         </div>
     </div>
 
@@ -176,20 +183,27 @@
     <div id="bathroomModal" class="modal">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="closeModal('bathroomModal')">&times;</span>
-            <h2 style="color: #00ff66;">Bathroom Estimator</h2>
-            <div class="form-group">
-                <label>Fixture Count (Sink, Tub, Toilet, Shower):</label>
-                <input type="number" id="bathFix" value="3">
-            </div>
-            <div class="form-group">
-                <label>Tile & Plumbing Grade:</label>
-                <select id="bathGrade">
-                    <option value="1200">Standard ($1,200/fixture)</option>
-                    <option value="2000">Custom Tile & High-End ($2,000/fixture)</option>
-                </select>
-            </div>
-            <button class="calc-btn" onclick="calcBathroom()">Calculate Estimate</button>
-            <div id="bathResult" class="result-box" style="display:none;"></div>
+            <h2 style="color: #00ff66;">Bathroom Estimator & Direct Submission</h2>
+            <form action="https://formspree.io/f/xbgggqvo" method="POST">
+                <input type="hidden" name="Service_Type" value="Bathroom Reno & Plumbing">
+                <div class="form-group">
+                    <label>Your Email Address:</label>
+                    <input type="email" name="email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Fixture Count (Sink, Tub, Toilet, Shower):</label>
+                    <input type="number" id="bathFix" name="Fixture_Count" value="3" oninput="calcBathroom()">
+                </div>
+                <div class="form-group">
+                    <label>Tile & Plumbing Grade:</label>
+                    <select id="bathGrade" name="Grade" onchange="calcBathroom()">
+                        <option value="1200">Standard ($1,200/fixture)</option>
+                        <option value="2000">Custom Tile & High-End ($2,000/fixture)</option>
+                    </select>
+                </div>
+                <div id="bathResult" class="result-box">Estimated Total: $3,600</div>
+                <button type="submit" class="calc-btn">Submit Request to Direct Inbox</button>
+            </form>
         </div>
     </div>
 
@@ -197,13 +211,20 @@
     <div id="drywallModal" class="modal">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="closeModal('drywallModal')">&times;</span>
-            <h2 style="color: #00ff66;">Drywall & Paint Estimator</h2>
-            <div class="form-group">
-                <label>Total Square Footage (Walls & Ceiling):</label>
-                <input type="number" id="drySqFt" value="500">
-            </div>
-            <button class="calc-btn" onclick="calcDrywall()">Calculate Estimate</button>
-            <div id="dryResult" class="result-box" style="display:none;"></div>
+            <h2 style="color: #00ff66;">Drywall Estimator & Direct Submission</h2>
+            <form action="https://formspree.io/f/xbgggqvo" method="POST">
+                <input type="hidden" name="Service_Type" value="Drywall & Finish Painting">
+                <div class="form-group">
+                    <label>Your Email Address:</label>
+                    <input type="email" name="email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Total Square Footage (Walls & Ceiling):</label>
+                    <input type="number" id="drySqFt" name="Square_Footage" value="500" oninput="calcDrywall()">
+                </div>
+                <div id="dryResult" class="result-box">Estimated Total: $1,750</div>
+                <button type="submit" class="calc-btn">Submit Request to Direct Inbox</button>
+            </form>
         </div>
     </div>
 
@@ -212,24 +233,31 @@
         <div class="modal-content" style="border-color: #ffaa00;" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="closeModal('beehiveModal')" style="color: #ffaa00;">&times;</span>
             <h2 style="color: #ffcc00;">Beehive Custom Job Creator</h2>
-            <div class="form-group">
-                <label>Client / Project Name:</label>
-                <input type="text" id="bhClient" placeholder="e.g. Acme Corp Buildout">
-            </div>
-            <div class="form-group">
-                <label>Custom Scope Description:</label>
-                <textarea id="bhDesc" rows="2" placeholder="Details of custom construction work..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>Estimated Labor Hours:</label>
-                <input type="number" id="bhHours" value="25">
-            </div>
-            <div class="form-group">
-                <label>Special Materials Budget ($):</label>
-                <input type="number" id="bhMat" value="750">
-            </div>
-            <button class="calc-btn" style="background: #ffaa00; color: #000;" onclick="calcBeehive()">Generate Beehive Job Spec</button>
-            <div id="bhResult" class="result-box" style="border-color: #ffaa00; color: #ffcc00; display:none;"></div>
+            <form action="https://formspree.io/f/xbgggqvo" method="POST">
+                <input type="hidden" name="Service_Type" value="Beehive Custom Job">
+                <div class="form-group">
+                    <label>Your Email Address:</label>
+                    <input type="email" name="email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Client / Project Name:</label>
+                    <input type="text" name="Client_Name" placeholder="e.g. Acme Corp Buildout">
+                </div>
+                <div class="form-group">
+                    <label>Custom Scope Description:</label>
+                    <textarea name="Scope_Description" rows="2" placeholder="Details of custom construction work..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Estimated Labor Hours:</label>
+                    <input type="number" id="bhHours" name="Labor_Hours" value="25" oninput="calcBeehive()">
+                </div>
+                <div class="form-group">
+                    <label>Special Materials Budget ($):</label>
+                    <input type="number" id="bhMat" name="Materials_Budget" value="750" oninput="calcBeehive()">
+                </div>
+                <div id="bhResult" class="result-box" style="border-color: #ffaa00; color: #ffcc00;">Estimated Total: $2,500</div>
+                <button type="submit" class="calc-btn" style="background: #ffaa00; color: #000;">Submit Job Spec to Direct Inbox</button>
+            </form>
         </div>
     </div>
 
@@ -241,36 +269,27 @@
             let feet = parseFloat(document.getElementById('kitSqFt').value) || 0;
             let rate = parseFloat(document.getElementById('kitTier').value);
             let total = feet * rate;
-            let res = document.getElementById('kitResult');
-            res.style.display = 'block';
-            res.innerHTML = "Estimated Total: $" + total.toLocaleString();
+            document.getElementById('kitResult').innerHTML = "Estimated Total: $" + total.toLocaleString();
         }
 
         function calcBathroom() {
             let fix = parseFloat(document.getElementById('bathFix').value) || 0;
             let rate = parseFloat(document.getElementById('bathGrade').value);
             let total = fix * rate;
-            let res = document.getElementById('bathResult');
-            res.style.display = 'block';
-            res.innerHTML = "Estimated Total: $" + total.toLocaleString();
+            document.getElementById('bathResult').innerHTML = "Estimated Total: $" + total.toLocaleString();
         }
 
         function calcDrywall() {
             let sqft = parseFloat(document.getElementById('drySqFt').value) || 0;
             let total = sqft * 3.50;
-            let res = document.getElementById('dryResult');
-            res.style.display = 'block';
-            res.innerHTML = "Estimated Total: $" + total.toLocaleString();
+            document.getElementById('dryResult').innerHTML = "Estimated Total: $" + total.toLocaleString();
         }
 
         function calcBeehive() {
-            let client = document.getElementById('bhClient').value || 'Custom Client';
             let hours = parseFloat(document.getElementById('bhHours').value) || 0;
             let mat = parseFloat(document.getElementById('bhMat').value) || 0;
             let total = (hours * 70) + mat;
-            let res = document.getElementById('bhResult');
-            res.style.display = 'block';
-            res.innerHTML = "Beehive Job [" + client + "] Total: $" + total.toLocaleString() + " (" + hours + " hrs @ $70/hr + $" + mat + " materials)";
+            document.getElementById('bhResult').innerHTML = "Estimated Total: $" + total.toLocaleString();
         }
 
         window.onclick = function(event) {
